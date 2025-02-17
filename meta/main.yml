@@ -1,0 +1,8 @@
+galaxy_info:
+  author: Sameer Aalm
+  description: SRE
+  company: NA
+  license: MIT 
+  min_ansible_version: "2.9"  
+  galaxy_tags: []  
+  dependencies: {}  

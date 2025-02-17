@@ -1,0 +1,5 @@
+---
+# meta/runtime.yml
+# This file is required for Ansible Galaxy collections.
+# It specifies the minimum version of Ansible needed to run the collection.
+requires_ansible: ">=2.9"

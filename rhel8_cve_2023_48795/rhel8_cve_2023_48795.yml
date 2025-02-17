@@ -1,0 +1,41 @@
+---
+- name: Apply CVE-2023-48795 workaround for RHEL 8
+  hosts: all
+  become: yes
+  tasks:
+
+    - name: Create CVE-2023-48795.pmod file
+      copy:
+        dest: /etc/crypto-policies/policies/modules/CVE-2023-48795.pmod
+        content: |
+          cipher@SSH = -CHACHA20-POLY1305
+          ssh_etm = 0
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Apply the crypto policy
+      command: update-crypto-policies --set $(update-crypto-policies --show):CVE-2023-48795
+      register: result
+      changed_when: "'CVE-2023-48795' in result.stdout"
+
+    - name: Restart SSH server
+      service:
+        name: sshd
+        state: restarted
+
+    - name: Verify openssh.config
+      command: cat /etc/crypto-policies/back-ends/openssh.config
+      register: openssh_config
+
+    - name: Verify opensshserver.config
+      command: cat /etc/crypto-policies/back-ends/opensshserver.config
+      register: opensshserver_config
+
+    - name: Ensure that specified ciphers and ssh_etm are not present
+      assert:
+        that:
+          - "'CHACHA20-POLY1305' not in openssh_config.stdout"
+          - "'ssh_etm = 0' not in openssh_config.stdout"
+          - "'CHACHA20-POLY1305' not in opensshserver_config.stdout"
+          - "'ssh_etm = 0' not in opensshserver_config.stdout"

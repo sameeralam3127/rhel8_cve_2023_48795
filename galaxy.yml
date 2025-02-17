@@ -1,0 +1,13 @@
+namespace: sameeralam3127
+name: rhel8_cve_2023_48795
+version: 1.0.0
+readme: README.md
+authors:
+  - Your Name
+dependencies: {}  
+tags:
+  - rhel
+  - security
+  - cve
+license: MIT
+repository: https://github.com/sameeralam3127/rhel8_cve_2023_48795
